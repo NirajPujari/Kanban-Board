@@ -1,6 +1,47 @@
-# Getting Started with Create React App
+# Kanban Board React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This Kanban board React app is a simple yet powerful project management tool that allows you to efficiently organize and manage your tasks. With an intuitive drag-and-drop interface, you can move tasks between "To Do," "In Progress," and "Done" columns, helping you visualize and track the progress of your work.
+
+## Project Dependencies
+
+To run this project, you'll need the following dependencies:
+
+- [Node.js](https://nodejs.org/): JavaScript runtime for building and running the app.
+
+### Front-end Dependencies
+
+- [React](https://reactjs.org/): JavaScript library for building user interfaces.
+- [react-dom](https://reactjs.org/docs/react-dom.html): Provides DOM-specific methods that can be used at the top level of a web app.
+- [react-scripts](https://reactjs.org/docs/react-scripts.html): Scripts and configuration used by Create React App.
+- [@testing-library](https://testing-library.com/): Utilities for testing React components.
+
+### Back-end Dependencies
+
+- [Express.js](https://expressjs.com/): Web application framework for building APIs and serving your app.
+- [cors](https://www.npmjs.com/package/cors): Middleware for handling Cross-Origin Resource Sharing (CORS).
+- [gh-pages](https://www.npmjs.com/package/gh-pages): Utility for deploying your app to GitHub Pages.
+
+### Testing Dependencies
+
+- [@testing-library/jest-dom](https://testing-library.com/docs/queries/about/): Utilities for testing DOM elements.
+- [@testing-library/react](https://testing-library.com/docs/queries/about/): Utilities for testing React components.
+- [@testing-library/user-event](https://testing-library.com/docs/ecosystem-user-event/about/): Utilities for simulating user events in testing.
+
+### Other Dependencies
+
+- [web-vitals](https://www.npmjs.com/package/web-vitals): Library for measuring web vitals and performance metrics.
+
+## How to Use
+
+1. Add tasks to the "To Do" column.
+2. Drag tasks to "In Progress" when you start working on them.
+3. Move tasks to "Done" when they're completed.
+4. Edit task details by clicking the "Edit" button.
+5. Delete tasks when they're no longer needed.
+
+**Get started today and take control of your tasks with this Kanban board React app!**
+
+For more information about this project, visit the [homepage](https://NirajPujari.github.io/Kanban-Board).
 
 ## Available Scripts
 
@@ -38,33 +79,3 @@ If you aren't satisfied with the build tool and configuration choices, you can `
 Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
 You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
