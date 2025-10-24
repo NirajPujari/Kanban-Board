@@ -46,6 +46,10 @@ export default function Home() {
 
   const [activeAddColumn, setActiveAddColumn] = useState<string | null>(null);
 
+
+
+
+  
   const handleStartAdd = (colId: string) => {
     setActiveAddColumn(colId); // only one active form at a time
   };
