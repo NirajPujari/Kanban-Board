@@ -11,6 +11,7 @@ export function setData<T>(key: string, value: T, ttlMs: number): void {
 // Get data and auto-remove if expired
 export function getData<T>(key: string): T | null {
   const itemStr = localStorage.getItem(key);
+  console.log(key)
   if (!itemStr) return null;
 
   const item = JSON.parse(itemStr);
@@ -22,4 +23,9 @@ export function getData<T>(key: string): T | null {
   }
 
   return item.value;
+}
+
+export function removeData(key: string) {
+  console.log(key)
+  localStorage.removeItem(key);
 }

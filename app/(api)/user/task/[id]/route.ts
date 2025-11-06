@@ -19,7 +19,7 @@ export async function GET(req: Request) {
   }
 
   // Step 2: Fetch tasks belonging to user
-  const tasks = await db.collection("tasks").find({ userId: id }).toArray();
+  const tasks = await db.collection("tasks").find({ userId: new ObjectId(id) }).toArray();
 
   if (!tasks.length) {
     return Response.json(
@@ -48,6 +48,13 @@ export async function POST(req: Request) {
     );
   }
 
+  if (!ObjectId.isValid(userId)) {
+    return Response.json(
+      { error: "Invalid taskId or userid" },
+      { status: 400 }
+    );
+  }
+
   // enforce valid task status
   const allowedTypes = ["To Do", "In Progress", "Done"];
   if (!allowedTypes.includes(type)) {
@@ -62,7 +69,7 @@ export async function POST(req: Request) {
   const db = await getDb();
 
   const newTask = {
-    userId,
+    userId: new ObjectId(userId),
     header: header.trim(),
     desc: desc?.trim() || "",
     level: Number(level) || 0,
@@ -86,7 +93,7 @@ export async function PUT(req: Request) {
   const body = await req.json();
   const { userId, header, desc, level, person, type, createdAt } = body;
 
-  if (!ObjectId.isValid(taskId) || !userId) {
+  if (!ObjectId.isValid(taskId) || !ObjectId.isValid(userId)) {
     return Response.json(
       { error: "Invalid taskId or userid" },
       { status: 400 }
@@ -106,7 +113,7 @@ export async function PUT(req: Request) {
   // verify the user exists
   const user = await db
     .collection("users")
-    .findOne({ _id: new ObjectId(userId) });
+    .findOne({ _id: new ObjectId(userId as string) });
   if (!user) {
     return Response.json({ error: "User not found" }, { status: 404 });
   }
@@ -114,7 +121,7 @@ export async function PUT(req: Request) {
   // build update object only from provided values
   const update = {
     _id: new ObjectId(taskId),
-    userId,
+    userId: new ObjectId(userId as string),
     ...(header && { header: header.trim() }),
     ...(desc && { desc: desc.trim() }),
     ...(level !== undefined && { level: Number(level) || 0 }),
@@ -129,7 +136,7 @@ export async function PUT(req: Request) {
 
   const result = await db
     .collection("tasks")
-    .updateOne({ _id: new ObjectId(taskId), userId: userId }, { $set: update });
+    .updateOne({ _id: new ObjectId(taskId), userId: new ObjectId(userId as string) }, { $set: update });
 
   if (result.matchedCount === 0) {
     return Response.json(

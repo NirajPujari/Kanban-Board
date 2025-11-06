@@ -57,6 +57,12 @@ export function Column({
         }`}
       >
         {children}
+        {!cardCount && !isAdding && (
+          <div className="w-[95%] min-h-[100px] flex flex-col items-center justify-center text-center p-4 border-2 border-dashed border-gray-700 rounded-xl">
+            <p className="text-gray-500 text-sm mb-2">No tasks yet</p>
+            <p className="text-gray-600 text-xs">Add a task to get started</p>
+          </div>
+        )}
         {!isAdding ? (
           <button
             className="w-[95%] text-xs lg:text-sm py-2 rounded-lg border-2 border-dashed border-[#171717] hover:border-[#284688]/50 hover:bg-[#284688]/5"

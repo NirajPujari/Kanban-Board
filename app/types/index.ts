@@ -2,8 +2,6 @@ import { PropsWithChildren } from "react";
 
 export type BoardLane = "To Do" | "In Progress" | "Done";
 
-export type Board = Record<BoardLane, BoardData[]>;
-
 export type BoardData = {
   _id: string;
   userId: string;
@@ -14,11 +12,24 @@ export type BoardData = {
   type: BoardLane;
 };
 
+export type Board = Record<BoardLane, BoardData[]>;
+
+export type LevelType = Record<number, { label: string; color: string }>;
+
+export type DashboardProps = { id: string };
+
+export type CardProps = {
+  data: BoardData;
+  onEdit: (id: string, updatedData: BoardData) => void;
+  onDelete: (id: string) => void;
+};
+
 export type CardsProps = {
   data: BoardData;
   onDelete: (id: number) => void;
   id: number;
 };
+
 export type ColumnProps = PropsWithChildren<{
   id: BoardLane;
   cardCount: number;
@@ -27,9 +38,6 @@ export type ColumnProps = PropsWithChildren<{
   onSubmitAdd: (columnId: BoardLane, data: BoardData) => void;
   onCancelAdd: () => void;
 }>;
-
-export type LevelType = Record<number, { label: string; color: string }>;
-
 
 export type User = {
   _id: string;

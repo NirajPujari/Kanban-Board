@@ -1,12 +1,14 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Board, BoardData, BoardLane } from "@types";
+import { Board, BoardData, BoardLane, DashboardProps, User } from "@types";
 import Card from "@components/Card";
 import { Column } from "@components/Column";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
-import { findCardInBoard } from "@utils/dndUtils";
+import { apiFetchJson, findCardInBoard } from "@utils/dndUtils";
 import { use } from "react";
 import { toast } from "sonner";
+import { removeData } from "../utils/localStorage";
+import { useRouter } from "next/navigation";
 
 const initialData: Board = {
   "To Do": [
@@ -53,45 +55,60 @@ const initialData: Board = {
   ],
 };
 
-function Dashboard({ id }: { id: string }) {
+function Dashboard({ id }: DashboardProps) {
   const [board, setBoard] = useState<Board>(initialData);
-  const [activeAddColumn, setActiveAddColumn] = useState<BoardLane | null>(null);
+  const [activeAddColumn, setActiveAddColumn] = useState<BoardLane | null>(
+    null
+  );
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [user,setUser] = useState<User | null>()
+  const router = useRouter();
+
+  useEffect(()=>{
+  (async () =>{
+    try{
+      const data = await apiFetchJson('/user/'+id)
+      setUser(data)
+    }
+    catch(err){
+      const error = err as Error
+      console.log(error.message || "Unable to Fetch User")
+      toast.error(error.message || "Unable to Fetch User")
+    }
+  })()
+
+  },[id])
 
   useEffect(() => {
     if (!id) return;
+    const ac = new AbortController();
+    setIsLoading(true);
 
-    const fetchTasks = async () => {
+    (async () => {
       try {
-        const res = await fetch(`/user/task/${id}`);
-        const json = await res.json();
-
-        if (!res.ok) {
-          toast.error(json.error || "Failed to fetch tasks");
-          return;
+        const json = await apiFetchJson(
+          `/user/task/${id}`,
+          undefined,
+          ac.signal
+        );
+        const tasks: BoardData[] = Array.isArray(json.tasks) ? json.tasks : [];
+        const newBoard: Board = { "To Do": [], "In Progress": [], Done: [] };
+        for (const t of tasks) {
+          if (t?.type && newBoard[t.type as BoardLane])
+            newBoard[t.type as BoardLane].push(t);
         }
-
-        const tasks = json.tasks ?? [];
-
-        const newBoard: Board = {
-          "To Do": [] as BoardData[],
-          "In Progress": [] as BoardData[],
-          Done: [] as BoardData[],
-        };
-
-        tasks.forEach((task: BoardData) => {
-          if (!newBoard[task.type]) return;
-          newBoard[task.type].push(task);
-        });
-
         setBoard(newBoard);
       } catch (err) {
-        const error = err as Error;
-        console.error("Fetch error:", error);
-        toast.error(error.message || "Server error");
+        const e = err as Error;
+        console.error("Fetch tasks error:", e);
+        toast.error(e.message || "Failed to fetch tasks");
+        // keep previous board (demo) if fetch fails
+      } finally {
+        setIsLoading(false);
       }
-    };
+    })();
 
-    fetchTasks();
+    return () => ac.abort();
   }, [id]);
 
   const handleStartAdd = (colId: BoardLane) => {
@@ -99,10 +116,28 @@ function Dashboard({ id }: { id: string }) {
   };
 
   const handleSubmitAdd = (colId: BoardLane, data: BoardData) => {
-    setBoard((prev) => ({
-      ...prev,
-      [colId]: [...prev[colId], data],
-    }));
+    const newData: BoardData = {
+      ...data,
+      userId: id,
+    };
+    (async () => {
+      try {
+        const data = await apiFetchJson("user/task/" + id, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newData),
+        });
+        newData._id = data.taskId || Date.now().toString();
+        toast.success("Task created");
+      } catch (err) {
+        const error = err as Error;
+        console.error("Create error:", error);
+        toast.error(error.message || "Failed to create task");
+      }
+    })();
+    setBoard((prev) => ({ ...prev, [colId]: [...prev[colId], newData] }));
     setActiveAddColumn(null);
   };
 
@@ -112,31 +147,66 @@ function Dashboard({ id }: { id: string }) {
 
   function handleDragEnd({ active, over }: DragEndEvent) {
     if (!over) return;
-
-    const cardId = active.id.toString(); // active.id is string | number
+    const cardId = String(active.id);
     const newColId = over.id as BoardLane;
 
-    setBoard((prevBoard) => {
-      const [fromColumn, card] = findCardInBoard(prevBoard, cardId);
-      if (!fromColumn || !card || fromColumn == newColId) return prevBoard;
+    const [fromColumn, card] = findCardInBoard(board, cardId);
+    if (!fromColumn || !card || fromColumn === newColId) return;
 
-      // Remove card from old column
-      const updatedFromColumn = prevBoard[fromColumn].filter(
-        (c) => c._id !== cardId
-      );
-
-      // Add card to new column
-      const updatedToColumn = [...prevBoard[newColId], card];
-
-      return {
-        ...prevBoard,
-        [fromColumn]: updatedFromColumn,
-        [newColId]: updatedToColumn,
-      };
+    setBoard((prev) => {
+      const updatedFrom = prev[fromColumn].filter((c) => c._id !== cardId);
+      const updatedTo = [...prev[newColId], { ...card, type: newColId }];
+      return { ...prev, [fromColumn]: updatedFrom, [newColId]: updatedTo };
     });
+
+    (async () => {
+      try {
+        await apiFetchJson(`/user/task/${cardId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...card, type: newColId }),
+        });
+      } catch (err) {
+        console.error("Move task error:", err);
+        toast.error((err as Error).message || "Failed to move task");
+        setBoard((prev) => {
+          const revertedTo = prev[newColId].filter((c) => c._id !== cardId);
+          return {
+            ...prev,
+            [newColId]: revertedTo,
+            [fromColumn]: [...prev[fromColumn], card],
+          };
+        });
+      }
+    })();
   }
 
+  const handleEdit = (cardId: string, updatedData: BoardData) => {
+    const oldData = board;
+    setBoard((prevBoard) => ({
+      ...prevBoard,
+      [updatedData.type]: prevBoard[updatedData.type].map((card) =>
+        card._id === cardId ? updatedData : card
+      ),
+    }));
+    (async () => {
+      try {
+        await apiFetchJson(`/user/task/${cardId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedData),
+        });
+      } catch (err) {
+        const error = err as Error;
+        console.error("Update task error:", err);
+        toast.error(error.message || "Failed to update task");
+        setBoard(oldData);
+      }
+    })();
+  };
+
   const handleDelete = (cardId: string) => {
+    const oldData = board;
     setBoard((prevBoard) => {
       const [column] = findCardInBoard(prevBoard, cardId);
       if (!column) return prevBoard;
@@ -146,40 +216,107 @@ function Dashboard({ id }: { id: string }) {
         [column]: prevBoard[column].filter((card) => card._id !== cardId),
       };
     });
+
+    (async () => {
+      try {
+        const res = await fetch(`/user/task/${cardId}`, {
+          method: "DELETE",
+        });
+        if (!res.ok) {
+          const json = await res.json();
+          throw new Error(json.error || "Failed to delete task");
+        }
+        toast.success("Task deleted");
+      } catch (err) {
+        const error = err as Error;
+        console.error("Delete error:", error);
+        toast.error(error.message || "Failed to delete task");
+        setBoard(oldData);
+      }
+    })();
   };
 
   const cols: BoardLane[] = ["To Do", "In Progress", "Done"];
 
+  const LoadingSkeleton = () => (
+    <div className="flex flex-col lg:flex-row gap-5">
+      {cols.map((col) => (
+        <div key={col} className="w-full min-h-6/12">
+          <div className="flex justify-between items-center">
+            <div className="h-6 w-24 bg-gray-700 rounded animate-pulse"></div>
+            <div className="h-6 w-8 bg-gray-700 rounded animate-pulse"></div>
+          </div>
+          <div className="mt-3 py-3 flex flex-col gap-4">
+            {[1, 2].map((i) => (
+              <div
+                key={i}
+                className="bg-[#171717] w-[95%] h-[140px] rounded-xl p-4 mx-auto animate-pulse"
+              >
+                <div className="h-5 w-3/4 bg-gray-700 rounded mb-3"></div>
+                <div className="h-4 w-full bg-gray-700 rounded mb-2"></div>
+                <div className="h-4 w-2/3 bg-gray-700 rounded"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
+  const handleLogout = () => {
+    removeData("User Id");
+    router.push("/");
+  };
+
   return (
     <main className="py-6 lg:py-10 px-8 sm:px-20 md:px-32 lg:px-44">
-      <h1 className="text-xl lg:text-2xl font-bold capitalize">Kanban Board</h1>
-      <div className="text-md lg:text-lg pb-10">
-        Manage your tasks and track progress
+      <div className="flex justify-between items-center mb-2">
+        <h1 className="text-xl lg:text-2xl font-bold capitalize">
+          Kanban Board
+        </h1>
+        <button
+          onClick={handleLogout}
+          className="px-4 py-2 text-sm font-medium rounded-md bg-red-600 text-white hover:bg-red-700 transition-colors duration-200"
+        >
+          Logout
+        </button>
       </div>
-      <DndContext onDragEnd={handleDragEnd}>
-        <div className="flex flex-col lg:flex-row gap-5">
-          {cols.map((col) => (
-            <Column
-              id={col}
-              cardCount={board[col].length}
-              key={col}
-              isAdding={activeAddColumn === col}
-              onStartAdd={handleStartAdd}
-              onSubmitAdd={handleSubmitAdd}
-              onCancelAdd={handleCancelAdd}
-            >
-              {board[col].map((data) => (
-                <Card onDelete={handleDelete} data={data} key={data._id} />
-              ))}
-            </Column>
-          ))}
-        </div>
-      </DndContext>
+      <div className="text-md lg:text-lg pb-10">
+        Welcome, {user?.name}
+      </div>
+      {isLoading ? (
+        <LoadingSkeleton />
+      ) : (
+        <DndContext onDragEnd={handleDragEnd}>
+          <div className="flex flex-col lg:flex-row gap-5">
+            {cols.map((col) => (
+              <Column
+                key={col}
+                id={col}
+                cardCount={board[col].length}
+                isAdding={activeAddColumn === col}
+                onStartAdd={handleStartAdd}
+                onSubmitAdd={handleSubmitAdd}
+                onCancelAdd={handleCancelAdd}
+              >
+                {board[col].map((data) => (
+                  <Card
+                    key={data._id}
+                    data={data}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                  />
+                ))}
+              </Column>
+            ))}
+          </div>
+        </DndContext>
+      )}
     </main>
   );
 }
 
-export default function Page({ params }: { params: Promise<{ id: string }> }) {
+export default function Page({ params }: { params: Promise<DashboardProps> }) {
   const { id } = use(params);
   return <Dashboard id={id} />;
 }
