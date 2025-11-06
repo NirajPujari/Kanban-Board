@@ -1,17 +1,17 @@
 import { PropsWithChildren } from "react";
 
-export type Board = {
-  "To Do": BoardData[];
-  "In Progress": BoardData[];
-  Done: BoardData[];
-};
+export type BoardLane = "To Do" | "In Progress" | "Done";
+
+export type Board = Record<BoardLane, BoardData[]>;
 
 export type BoardData = {
-  id: number;
+  _id: string;
+  userId: string;
   header: string;
   desc: string;
   level: number;
   person: string;
+  type: BoardLane;
 };
 
 export type CardsProps = {
@@ -20,12 +20,22 @@ export type CardsProps = {
   id: number;
 };
 export type ColumnProps = PropsWithChildren<{
-  id: string;
+  id: BoardLane;
   cardCount: number;
   isAdding: boolean;
-  onStartAdd: (columnId: string) => void;
-  onSubmitAdd: (columnId: string, data: BoardData) => void;
+  onStartAdd: (columnId: BoardLane) => void;
+  onSubmitAdd: (columnId: BoardLane, data: BoardData) => void;
   onCancelAdd: () => void;
 }>;
 
 export type LevelType = Record<number, { label: string; color: string }>;
+
+
+export type User = {
+  _id: string;
+  name: string;
+  email: string;
+  password: string;
+  createdAt?: Date;
+  lastLogin?: Date | null;
+};

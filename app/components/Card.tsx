@@ -15,10 +15,10 @@ export default function Card({
   onDelete,
 }: {
   data: BoardData;
-  onDelete: (id: number) => void;
+  onDelete: (id: string) => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({ id: data.id });
+    useDraggable({ id: data._id });
 
   const styleMain: React.CSSProperties = {
     transform: CSS.Translate.toString(transform),
@@ -33,7 +33,7 @@ export default function Card({
     // stopPropagation here is for safety on the click event as well
     e.stopPropagation();
     e.preventDefault();
-    onDelete(data.id);
+    onDelete(data._id);
   };
 
   const cardTemplate = (

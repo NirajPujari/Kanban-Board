@@ -13,8 +13,10 @@ export function Column({
 }: ColumnProps) {
   const { isOver, setNodeRef } = useDroppable({ id });
   const [draft, setDraft] = useState<BoardData>({
-    id: -1,
+    _id: "-1",
+    userId: "user123",
     header: "",
+    type: id,
     desc: "",
     level: 1,
     person: "",
@@ -27,8 +29,16 @@ export function Column({
   };
 
   const handleSubmit = () => {
-    onSubmitAdd(id, { ...draft, id: Date.now() });
-    setDraft({ id: -1, header: "", desc: "", level: 1, person: "" }); // reset
+    onSubmitAdd(id, { ...draft, _id: Date.now().toString() });
+    setDraft({
+      _id: "-1",
+      userId: "user123",
+      header: "",
+      desc: "",
+      type: id,
+      level: 1,
+      person: "",
+    }); // reset
   };
 
   return (
