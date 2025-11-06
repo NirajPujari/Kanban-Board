@@ -3,10 +3,10 @@ import { ObjectId } from "mongodb";
 import bcrypt from "bcryptjs";
 import { User } from "@types";
 
-export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(req: Request) {
+  const url = new URL(req.url);
+  const pathParts = url.pathname.split("/");
+  const userId = pathParts[pathParts.length - 1];
   const body = await req.json();
   const db = await getDb();
 
@@ -23,10 +23,9 @@ export async function PUT(
   // updated timestamp (optional but practical)
   updateFields.lastLogin = body.lastLogin ?? undefined;
 
-  const result = await db.collection("users").updateOne(
-    { _id: new ObjectId(params.id) },
-    { $set: updateFields }
-  );
+  const result = await db
+    .collection("users")
+    .updateOne({ _id: new ObjectId(userId) }, { $set: updateFields });
 
   if (result.matchedCount === 0) {
     return new Response(JSON.stringify({ error: "User not found" }), {
@@ -37,15 +36,14 @@ export async function PUT(
   return Response.json({ message: "User updated successfully" });
 }
 
-
-export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(req: Request) {
+  const url = new URL(req.url);
+  const pathParts = url.pathname.split("/");
+  const userId = pathParts[pathParts.length - 1];
   const db = await getDb();
 
   const result = await db.collection("users").deleteOne({
-    _id: new ObjectId(params.id),
+    _id: new ObjectId(userId),
   });
 
   if (result.deletedCount === 0) {

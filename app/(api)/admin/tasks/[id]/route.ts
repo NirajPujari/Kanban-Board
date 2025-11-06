@@ -2,10 +2,10 @@ import { BoardData } from "@/app/types";
 import { getDb } from "@db";
 import { ObjectId } from "mongodb";
 
-export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(req: Request) {
+  const url = new URL(req.url);
+  const pathParts = url.pathname.split("/");
+  const taskId = pathParts[pathParts.length - 1];
   const body = await req.json();
   const db = await getDb();
 
@@ -32,7 +32,7 @@ export async function PUT(
 
   const result = await db
     .collection("tasks")
-    .updateOne({ _id: new ObjectId(params.id) }, { $set: updateFields });
+    .updateOne({ _id: new ObjectId(taskId) }, { $set: updateFields });
 
   if (result.matchedCount === 0) {
     return new Response(JSON.stringify({ error: "Task not found" }), {
@@ -43,15 +43,15 @@ export async function PUT(
   return Response.json({ message: "Task updated successfully" });
 }
 
-export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(req: Request) {
+  const url = new URL(req.url);
+  const pathParts = url.pathname.split("/");
+  const taskId = pathParts[pathParts.length - 1];
   const db = await getDb();
 
   const result = await db
     .collection("tasks")
-    .deleteOne({ _id: new ObjectId(params.id) });
+    .deleteOne({ _id: new ObjectId(taskId) });
 
   if (result.deletedCount === 0) {
     return new Response(JSON.stringify({ error: "Task not found" }), {
