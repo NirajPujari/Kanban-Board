@@ -24,6 +24,12 @@ export type CardProps = {
   onDelete: (id: string) => void;
 };
 
+export interface LoaderProps {
+  cols?: string[];
+  type?: "board" | "stats" | "users";
+}
+
+
 export type CardsProps = {
   data: BoardData;
   onDelete: (id: number) => void;

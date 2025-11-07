@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import { Board, BoardData, BoardLane, DashboardProps, User } from "@types";
 import Card from "@components/Card";
 import { Column } from "@components/Column";
+import Loader from "@components/Loader";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { apiFetchJson, findCardInBoard } from "@utils/dndUtils";
 import { use } from "react";
 import { toast } from "sonner";
-import { removeData } from "../utils/localStorage";
+import { removeData } from "@utils/localStorage";
 import { useRouter } from "next/navigation";
 
 const initialData: Board = {
@@ -61,23 +62,21 @@ function Dashboard({ id }: DashboardProps) {
     null
   );
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [user,setUser] = useState<User | null>()
+  const [user, setUser] = useState<User | null>();
   const router = useRouter();
 
-  useEffect(()=>{
-  (async () =>{
-    try{
-      const data = await apiFetchJson('/user/'+id)
-      setUser(data)
-    }
-    catch(err){
-      const error = err as Error
-      console.log(error.message || "Unable to Fetch User")
-      toast.error(error.message || "Unable to Fetch User")
-    }
-  })()
-
-  },[id])
+  useEffect(() => {
+    (async () => {
+      try {
+        const data = await apiFetchJson("/user/" + id);
+        setUser(data);
+      } catch (err) {
+        const error = err as Error;
+        console.log(error.message || "Unable to Fetch User");
+        toast.error(error.message || "Unable to Fetch User");
+      }
+    })();
+  }, [id]);
 
   useEffect(() => {
     if (!id) return;
@@ -238,31 +237,6 @@ function Dashboard({ id }: DashboardProps) {
 
   const cols: BoardLane[] = ["To Do", "In Progress", "Done"];
 
-  const LoadingSkeleton = () => (
-    <div className="flex flex-col lg:flex-row gap-5">
-      {cols.map((col) => (
-        <div key={col} className="w-full min-h-6/12">
-          <div className="flex justify-between items-center">
-            <div className="h-6 w-24 bg-gray-700 rounded animate-pulse"></div>
-            <div className="h-6 w-8 bg-gray-700 rounded animate-pulse"></div>
-          </div>
-          <div className="mt-3 py-3 flex flex-col gap-4">
-            {[1, 2].map((i) => (
-              <div
-                key={i}
-                className="bg-[#171717] w-[95%] h-[140px] rounded-xl p-4 mx-auto animate-pulse"
-              >
-                <div className="h-5 w-3/4 bg-gray-700 rounded mb-3"></div>
-                <div className="h-4 w-full bg-gray-700 rounded mb-2"></div>
-                <div className="h-4 w-2/3 bg-gray-700 rounded"></div>
-              </div>
-            ))}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-
   const handleLogout = () => {
     removeData("User Id");
     router.push("/");
@@ -281,11 +255,9 @@ function Dashboard({ id }: DashboardProps) {
           Logout
         </button>
       </div>
-      <div className="text-md lg:text-lg pb-10">
-        Welcome, {user?.name}
-      </div>
+      <div className="text-md lg:text-lg pb-10">Welcome, {user?.name}</div>
       {isLoading ? (
-        <LoadingSkeleton />
+        <Loader />
       ) : (
         <DndContext onDragEnd={handleDragEnd}>
           <div className="flex flex-col lg:flex-row gap-5">

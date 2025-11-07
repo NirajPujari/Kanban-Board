@@ -71,7 +71,7 @@ export default function Authication() {
       if (login.rememberMe) {
         setData("User Id", String(data.id), 2592000000);
       }
-      router.push(`/${data.id}`);
+      router.push(`/dashboard/${data.id}`);
     } catch (err) {
       console.error("Login error:", err);
       toast.error("Server error, try again later");
