@@ -1,10 +1,7 @@
-"use client";
 import Link from "next/link";
 import { AlertCircle } from "lucide-react";
-import { getData } from "./utils/localStorage";
 
 export default function NotFound() {
-  const id = getData("User Id");
   return (
     <main className="min-h-screen flex items-center justify-center p-6">
       <div className="max-w-3xl w-full text-center">
@@ -20,19 +17,12 @@ export default function NotFound() {
               have been moved, renamed, or never existed.
             </p>
 
-            <div className="flex gap-3">
+            <div className="flex justify-center items-center">
               <Link
                 href="/"
                 className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium transition-colors"
               >
                 Go to Homepage
-              </Link>
-
-              <Link
-                href={id ? `/dashboard/${id}` : "/"}
-                className="inline-flex items-center px-4 py-2 bg-transparent text-gray-300 border border-gray-700 rounded-md text-sm hover:bg-gray-800 transition-colors"
-              >
-                Browse Dashboard
               </Link>
             </div>
 
