@@ -1,8 +1,10 @@
 # [Kanban Board](https://yourskanbanboard.vercel.app/)
 
-![This is an alt text.](/public/Login.png "This is a sample image.")
-![This is an alt text.](/public/Signup.png "This is a sample image.")
-![This is an alt text.](/public/Dashboard.png "This is a sample image.")
+<p align="center">
+  <img src="/public/Login.png" alt="Login" title="Login" style="border: 2px solid #ccc; border-radius: 8px; width: 400px;"/>
+  <img src="/public/Signup.png" alt="Signup" title="Signup" style="border: 2px solid #ccc; border-radius: 8px; width: 400px;"/>
+  <img src="/public/Dashboard.png" alt="Dashboard" title="Dashboard" style="border: 2px solid #ccc; border-radius: 8px; width: 400px;"/>
+</p>
 
 ### Next.js frontend + TypeScript backend + MongoDB
 
