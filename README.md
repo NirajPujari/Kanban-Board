@@ -1,9 +1,9 @@
 # [Kanban Board](https://yourskanbanboard.vercel.app/)
 
 <p align="center">
-  <img src="/public/Login.png" alt="Login" title="Login" style="border: 2px solid #ccc; border-radius: 8px; width: 400px;"/>
-  <img src="/public/Signup.png" alt="Signup" title="Signup" style="border: 2px solid #ccc; border-radius: 8px; width: 400px;"/>
-  <img src="/public/Dashboard.png" alt="Dashboard" title="Dashboard" style="border: 2px solid #ccc; border-radius: 8px; width: 400px;"/>
+  <img src="/public/Login.png" alt="Login" title="Login" style="border: 3px solid white; border-radius: 8px; display: block; margin: 10px auto;"/>
+  <img src="/public/Signup.png" alt="Signup" title="Signup" style="border: 3px solid white; border-radius: 8px; display: block; margin: 10px auto;"/>
+  <img src="/public/Dashboard.png" alt="Dashboard" title="Dashboard" style="border: 3px solid white; border-radius: 8px; display: block; margin: 10px auto;"/>
 </p>
 
 ### Next.js frontend + TypeScript backend + MongoDB
