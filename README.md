@@ -1,4 +1,8 @@
-# [Kanban Board](https://yourskanbanboard.vercel.app/)
+# 🧩 [Kanban Board](https://yourskanbanboard.vercel.app/)
+
+#
+
+## 📸 Screenshots
 
 ![This is an alt text.](/public/login.jpg "This is a sample image.")
 ![This is an alt text.](/public/signup.jpg "This is a sample image.")
@@ -10,26 +14,26 @@ A Kanban board app. Frontend is Next.js (TypeScript). Backend API routes live in
 
 #
 
-### Tech stack
-* Frontend: Next.js (App Router), TypeScript
-* Backend: Next.js API routes (TypeScript)
-* DB: MongoDB (recommended: Atlas)
-* Auth: JWT (or NextAuth if preferred)
-* Tooling: Node 18+, pnpm / npm / yarn, ESLint, Prettier, Vitest/Jest (optional)
+## ⚙️ Tech Stack
+- **Frontend:** Next.js (App Router) + TypeScript  
+- **Backend:** Next.js API Routes (TypeScript)  
+- **Database:** MongoDB (recommended: Atlas)  
+- **Authentication:** JWT (NextAuth optional)  
+- **Tooling:** Node 18+, ESLint, Prettier, Vitest/Jest  
 
 #
 
-### Features
-* User signup / login.
-* CRUD tasks with columns (todo, in-progress, done).
-* Task assignments, priorities, user, labels.
-* Admin routes for user/task management.
-* Role-based access (admin / user).
-* RESTful API routes under /api (mirrors app routes like /admin/tasks/[id]).
+## 🚀 Features
+- User signup and login  
+- CRUD operations for tasks  
+- Task categorization (To-do, In-progress, Done)  
+- Priority levels, labels, and assignments  
+- Admin and user role-based access  
+- RESTful API routes for users and tasks  
 
 #
 
-### Repository layout (recommended)
+## 📂 Project Structure
 ```
 /
 ├─ app/                       # Next.js App Router pages & API handlers
@@ -72,8 +76,9 @@ A Kanban board app. Frontend is Next.js (TypeScript). Backend API routes live in
 
 #
 
-### Data models (TypeScript interfaces)
-User (example)
+## 🧠 Data Models
+
+### User (example)
 ```
 type User = {
   _id: string;
@@ -85,7 +90,7 @@ type User = {
 };
 ```
 
-Task (example)
+### Task (example)
 
 ```
 Task = {
@@ -101,10 +106,10 @@ Task = {
 
 #
 
-### Important API routes
-#### Use these as the canonical endpoints for frontend integration.
+## 🌐 API Endpoints
+### Use these as the canonical endpoints for frontend integration.
 
-Admin Routes
+### Admin Routes
 * GET /admin/tasks — fetch tasks
 * POST /admin/tasks — create tasks
 * PUT /admin/tasks/{id} - update tasks
@@ -114,7 +119,7 @@ Admin Routes
 * PUT /admin/user/{id} - update user
 * DELETE /admin/user/{id} - delete user
 
-User Routes
+### User Routes
 * GET /user/{id} - Fetch user by id
 * POST /user/login - login for user
 * POST /user/signup - signup for user
@@ -125,7 +130,7 @@ User Routes
 
 #
 
-### Environment variables
+### ⚙️ Environment Variables
 Create .env (do not commit).
 NODE_ENV=development
 PORT=3000
@@ -135,11 +140,14 @@ DB_NAME="MongoDB Name"
 
 #
 
-### Setup (local)
-1. Install Node 18+.
-2. Clone repo.
-3. Copy .env.example to .env and edit values.
-4. Install dependencies:
+### 💻 Setup (Local)
+1. Clone the repository
+    ```
+    git clone https://github.com/NirajPujari/Kanban-Board
+    cd Kanban-Board
+    ```
+2. Copy .env.example to .env and edit values.
+3. Install dependencies:
     ```
     # pnpm
     pnpm install
@@ -147,14 +155,19 @@ DB_NAME="MongoDB Name"
     # or npm
     npm install
     ```
-5. Run dev server:
+4. Run dev server:
     ```
     pnpm dev
     # or
     npm run dev
 
     ```
-6. Open http://localhost:3000.
+5. Open http://localhost:3000.
+
+#
+
+## 🐳 Docker (Optional)
+docker-compose.yml with a Mongo service and the app (node). For production prefer deploying Next to Vercel and Mongo to Atlas.
 
 #
 
@@ -200,18 +213,10 @@ DB_NAME="MongoDB Name"
 
 #
 
-### Docker (optional)
-docker-compose.yml with a Mongo service and the app (node). For production prefer deploying Next to Vercel and Mongo to Atlas.
+## 🪪 License
+MIT.
 
 #
 
-### Contributing
-1. Fork.
-2. Create branch feature/short-description.
-3. Add tests.
-4. Open PR with description and screenshot (if UI).
-
-#
-
-### License
-MIT (or your chosen license).
+## 🙌 Credits
+Developed by Niraj Pujari as a modern full-stack Kanban task management application using Next.js + TypeScript + MongoDB.
