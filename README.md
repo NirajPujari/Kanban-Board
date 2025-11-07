@@ -1,5 +1,9 @@
 # 🧩 [Kanban Board](https://yourskanbanboard.vercel.app/)
 
+### Next.js frontend + TypeScript backend + MongoDB
+
+A Kanban board app. Frontend is Next.js (TypeScript). Backend API routes live inside the Next app (app router). MongoDB stores users and tasks. Auth uses JWT. Designed for local dev, Docker, and Vercel deployments.
+
 #
 
 ## 📸 Screenshots
@@ -7,10 +11,6 @@
 ![This is an alt text.](/public/login.jpg "This is a sample image.")
 ![This is an alt text.](/public/signup.jpg "This is a sample image.")
 ![This is an alt text.](/public/dashboard.jpg "This is a sample image.")
-
-### Next.js frontend + TypeScript backend + MongoDB
-
-A Kanban board app. Frontend is Next.js (TypeScript). Backend API routes live inside the Next app (app router). MongoDB stores users and tasks. Auth uses JWT. Designed for local dev, Docker, and Vercel deployments.
 
 #
 
@@ -140,7 +140,7 @@ DB_NAME="MongoDB Name"
 
 #
 
-### 💻 Setup (Local)
+### 🚀 Installation & Running
 1. Clone the repository
     ```
     git clone https://github.com/NirajPujari/Kanban-Board
