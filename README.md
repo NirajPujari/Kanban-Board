@@ -1,10 +1,8 @@
 # [Kanban Board](https://yourskanbanboard.vercel.app/)
 
-<p align="center">
-  <img src="/public/Login.png" alt="Login" title="Login" style="border: 3px solid white; border-radius: 8px; display: block; margin: 10px auto;"/>
-  <img src="/public/Signup.png" alt="Signup" title="Signup" style="border: 3px solid white; border-radius: 8px; display: block; margin: 10px auto;"/>
-  <img src="/public/Dashboard.png" alt="Dashboard" title="Dashboard" style="border: 3px solid white; border-radius: 8px; display: block; margin: 10px auto;"/>
-</p>
+![This is an alt text.](/public/login.jpg "This is a sample image.")
+![This is an alt text.](/public/signup.jpg "This is a sample image.")
+![This is an alt text.](/public/dashboard.jpg "This is a sample image.")
 
 ### Next.js frontend + TypeScript backend + MongoDB
 
