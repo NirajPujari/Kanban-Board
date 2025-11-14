@@ -28,18 +28,11 @@ export async function POST(req: Request) {
     email: body.email.toLowerCase().trim(),
     password: hashedPassword,
     createdAt: new Date(),
-    lastLogin: null
+    lastLogin: null,
   };
 
   const result = await db.collection("users").insertOne(newUser);
+  const response = { _id: result.insertedId, ...newUser };
 
-  return Response.json({
-    insertedId: result.insertedId,
-    user: {
-      name: newUser.name,
-      email: newUser.email,
-      createdAt: newUser.createdAt,
-      lastLogin: newUser.lastLogin
-    }
-  });
+  return Response.json(response);
 }

@@ -20,9 +20,6 @@ export async function PUT(req: Request) {
     updateFields.password = await bcrypt.hash(body.password, 10);
   }
 
-  // updated timestamp (optional but practical)
-  updateFields.lastLogin = body.lastLogin ?? undefined;
-
   const result = await db
     .collection("users")
     .updateOne({ _id: new ObjectId(userId) }, { $set: updateFields });
@@ -33,7 +30,7 @@ export async function PUT(req: Request) {
     });
   }
 
-  return Response.json({ message: "User updated successfully" });
+  return Response.json({ message: "User updated successfully", password: updateFields.password });
 }
 
 export async function DELETE(req: Request) {

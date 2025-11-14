@@ -10,7 +10,7 @@ const LEVELS: LevelType = {
   3: { label: "High", color: "bg-red-500" },
 };
 
-export default function Card({ data, onEdit, onDelete }: CardProps) {
+export function Card({ data, onEdit, onDelete }: CardProps) {
   const [editData, setEditData] = useState<BoardData>({ ...data });
   const [isEditing, setIsEditing] = useState(false);
 
@@ -192,7 +192,7 @@ export default function Card({ data, onEdit, onDelete }: CardProps) {
             className="p-1"
             title="Edit"
           >
-            <Pencil className="h-5 w-5 text-gray-400 hover:text-blue-500 cursor-pointer transition-colors" />
+            <Pencil className="h-5 w-5 text-gray-400 hover:text-green-500 cursor-pointer transition-colors" />
           </button>
           <button
             onPointerDown={(e) => e.stopPropagation()}

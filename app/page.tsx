@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { getData, setData } from "./utils/localStorage";
 import { useRouter } from "next/navigation";
+import { apiFetchJson } from "./utils/dndUtils";
 
 interface InputFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   icon?: LucideIcon;
@@ -53,19 +54,13 @@ export default function Authication() {
     }
 
     try {
-      const res = await fetch("/user/login", {
+      const data = await apiFetchJson("/user/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(login),
       });
-      const data = await res.json();
-
-      if (!res.ok) {
-        toast.error(data.error || "Login failed");
-        return;
-      }
 
       toast.success("Login Successfull!!");
       if (login.rememberMe) {
@@ -113,19 +108,13 @@ export default function Authication() {
     }
 
     try {
-      const res = await fetch("/user/signup", {
+      await apiFetchJson("/user/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ userName, email, password }),
       });
-      const data = await res.json();
-
-      if (!res.ok) {
-        toast.error(data.error || "Sign Up failed");
-        return;
-      }
 
       toast.success("Sign Up Successfull!!");
       router.refresh();

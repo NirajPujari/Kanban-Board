@@ -9,12 +9,12 @@ export async function GET() {
 export async function POST(req: Request) {
   const body = await req.json();
 
-  const { _id, userId, header, desc, level, person, type } = body;
+  const { userId, header, desc, level, person, type } = body;
 
   // simple guardrails — minimum dignity for your database
-  if (!_id || !userId || !header || !type) {
+  if ( !userId || !header || !type) {
     return new Response(
-      JSON.stringify({ error: "Fields _id, userId, header, and type are required" }),
+      JSON.stringify({ error: "Fields userId, header, and type are required" }),
       { status: 400 }
     );
   }
@@ -31,7 +31,6 @@ export async function POST(req: Request) {
   const db = await getDb();
 
   const newTask = {
-    _id,
     userId,
     header: header.trim(),
     desc: desc?.trim() || "",

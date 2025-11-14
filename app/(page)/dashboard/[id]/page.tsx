@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Board, BoardData, BoardLane, DashboardProps, User } from "@types";
-import Card from "@components/Card";
+import { Card } from "@components/Card";
 import { Column } from "@components/Column";
-import Loader from "@components/Loader";
+import { Loader } from "@components/Loader";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { apiFetchJson, findCardInBoard } from "@utils/dndUtils";
 import { use } from "react";
@@ -101,7 +101,6 @@ function Dashboard({ id }: DashboardProps) {
         const e = err as Error;
         console.error("Fetch tasks error:", e);
         toast.error(e.message || "Failed to fetch tasks");
-        // keep previous board (demo) if fetch fails
       } finally {
         setIsLoading(false);
       }
@@ -218,13 +217,9 @@ function Dashboard({ id }: DashboardProps) {
 
     (async () => {
       try {
-        const res = await fetch(`/user/task/${cardId}`, {
+        await apiFetchJson(`/user/task/${cardId}`, {
           method: "DELETE",
         });
-        if (!res.ok) {
-          const json = await res.json();
-          throw new Error(json.error || "Failed to delete task");
-        }
         toast.success("Task deleted");
       } catch (err) {
         const error = err as Error;

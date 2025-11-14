@@ -26,7 +26,7 @@ export type CardProps = {
 
 export interface LoaderProps {
   cols?: string[];
-  type?: "board" | "stats" | "users";
+  type?: "board" | "stats" | "users" | "userList";
 }
 
 

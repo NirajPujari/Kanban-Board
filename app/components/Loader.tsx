@@ -1,6 +1,6 @@
 import { LoaderProps } from "@types";
 
-export default function Loader({
+export function Loader({
   cols = ["To Do", "In Progress", "Done"],
   type = "board",
 }: LoaderProps) {
@@ -22,6 +22,37 @@ export default function Loader({
       <div className="flex items-center gap-4">
         <div className="h-5 w-20 bg-gray-700 rounded animate-pulse"></div>
         <div className="h-9 w-64 bg-gray-700 rounded animate-pulse"></div>
+      </div>
+    );
+  }
+
+  // New: loader for the horizontal user list (single row, ~3 visible)
+  if (type === "userList") {
+    return (
+      <div className="overflow-x-auto py-2">
+        <div className="flex gap-5">
+          {[1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="flex-shrink-0 w-[32%] min-w-[220px] bg-neutral-800 rounded-xl shadow-lg p-5 flex flex-col items-center justify-center relative"
+            >
+              <div className="absolute top-3 left-3">
+                <div className="w-7 h-7 rounded-full bg-neutral-900 animate-pulse"></div>
+              </div>
+
+              <div className="w-14 h-14 rounded-full bg-gray-700 animate-pulse mb-2"></div>
+
+              <div className="text-center w-full">
+                <div className="h-5 w-3/4 bg-gray-700 rounded mx-auto animate-pulse mb-2"></div>
+                <div className="h-3 w-1/2 bg-gray-700 rounded mx-auto animate-pulse"></div>
+              </div>
+
+              <div className="absolute top-3 right-3">
+                <div className="h-6 w-12 bg-gray-700 rounded animate-pulse"></div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
