@@ -79,16 +79,12 @@ function Dashboard({ id }: DashboardProps) {
   }, [id]);
 
   useEffect(() => {
-    if (!id) return;
-    const ac = new AbortController();
     setIsLoading(true);
 
     (async () => {
       try {
         const json = await apiFetchJson(
-          `/user/task/${id}`,
-          undefined,
-          ac.signal
+          `/user/task/${id}`
         );
         const tasks: BoardData[] = Array.isArray(json.tasks) ? json.tasks : [];
         const newBoard: Board = { "To Do": [], "In Progress": [], Done: [] };
@@ -106,7 +102,6 @@ function Dashboard({ id }: DashboardProps) {
       }
     })();
 
-    return () => ac.abort();
   }, [id]);
 
   const handleStartAdd = (colId: BoardLane) => {
@@ -120,7 +115,7 @@ function Dashboard({ id }: DashboardProps) {
     };
     (async () => {
       try {
-        const data = await apiFetchJson("user/task/" + id, {
+        const data = await apiFetchJson("/user/task/" + id, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
