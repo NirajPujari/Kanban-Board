@@ -11,6 +11,8 @@ A Kanban board app. Frontend is Next.js (TypeScript). Backend API routes live in
 ![This is an alt text.](/public/login.jpg "This is a sample image.")
 ![This is an alt text.](/public/signup.jpg "This is a sample image.")
 ![This is an alt text.](/public/dashboard.jpg "This is a sample image.")
+![This is an alt text.](/public/dashboard.jpg "This is a sample image.")
+![This is an alt text.](/public/admin.png "This is a sample image.")
 
 #
 
@@ -19,7 +21,7 @@ A Kanban board app. Frontend is Next.js (TypeScript). Backend API routes live in
 - **Backend:** Next.js API Routes (TypeScript)  
 - **Database:** MongoDB (recommended: Atlas)  
 - **Authentication:** JWT (NextAuth optional)  
-- **Tooling:** Node 18+, ESLint, Prettier, Vitest/Jest  
+- **Tooling:** Node 18+, ESLint, Prettier, Vitest/Jest, ettc
 
 #
 
@@ -34,6 +36,7 @@ A Kanban board app. Frontend is Next.js (TypeScript). Backend API routes live in
 #
 
 ## 📂 Project Structure
+
 ```
 /
 ├─ app/                       # Next.js App Router pages & API handlers
@@ -42,29 +45,37 @@ A Kanban board app. Frontend is Next.js (TypeScript). Backend API routes live in
 │  │  │  ├─ tasks/
 │  │  │  │  ├─ [id]/route.ts  # PUT, DELETE
 │  │  │  │  └─ route.ts  # GET, POST
-│  │  │  ├─ user/
-│  │  │  │  ├─ [id]/route.ts  # PUT, DELETE
-│  │  │  │  └─ route.ts  # GET, POST
+│  │  │  └─ user/
+│  │  │     ├─ [id]/route.ts  # PUT, DELETE
+│  │  │     └─ route.ts  # GET, POST
+│  │  ├─ auth/
+│  │  │  ├─ login/route.ts  # POST
+│  │  │  ├─ logout/route.ts  # POST
+│  │  │  └─ signup/route.ts  # POST
 │  │  ├─ user/
 │  │  │  ├─ [id]/route.ts  # GET
-│  │  │  ├─ login/route.ts  # POST
-│  │  │  ├─ signup/route.ts  # POST
-│  │  │  ├─ tasks/
-│  │  │  │  ├─ [id]/route.ts  # GET, POST PUT, DELETE
-│  ├─ (id)/page.tsx
+│  │  │  └─ tasks/
+│  │  │     └─ [id]/route.ts  # GET, POST PUT, DELETE
+│  ├─ (page)/
+│  │  ├─ admin/page.tsx
+│  │  ├─ dashboard/[id]/page.tsx
+│  │  ├─ login/page.tsx
+│  │  └─ signup/page.tsx
 │  ├─ components
 │  |  ├─ Card.tsx
 │  |  └─ Column.tsx
+│  |  └─ Loader.tsx
 │  ├─ lib/
 │  │  └─ db.ts                   # Mongo connection helper
-│  ├─ login/page.tsx
-│  ├─ signup/page.tsx
 │  ├─ types/index.ts
 │  ├─ utils/
+│  │  ├─ auth.ts
 │  │  ├─ dndUtils.ts
+│  │  ├─ jwt.ts
 │  │  └─ localStorgae.ts
 │  ├─ globals.css
 │  ├─ layout.tsx
+│  ├─ not-found.tsx
 │  └─ page.tsx
 ├─ public/
 ├─ .env
@@ -119,10 +130,13 @@ Task = {
 * PUT /admin/user/{id} - update user
 * DELETE /admin/user/{id} - delete user
 
+### Auth Routes
+* POST /auth/login - login for user
+* POST /auth/signup - signup for user
+* POST /auth/tasks/{id} — logout for user
+
 ### User Routes
 * GET /user/{id} - Fetch user by id
-* POST /user/login - login for user
-* POST /user/signup - signup for user
 * GET /user/tasks/{id} — fetch tasks by userId
 * POST /user/tasks/{id} — create tasks by userId
 * PUT /user/tasks/{id} - update tasks by taskId
@@ -136,7 +150,9 @@ NODE_ENV=development
 PORT=3000
 
 DB_CONNECTION_STRING=mongodb+srv://<user>:<pass>@cluster0.mongodb.net/kanban?retryWrites=true&w=majority
-DB_NAME="MongoDB Name" 
+DB_NAME="MongoDB Name"
+JWT_SECRET="Screat_key"
+JWT_EXPIRES_IN="Time_Duration"
 
 #
 
@@ -188,8 +204,10 @@ docker-compose.yml with a Mongo service and the app (node). For production prefe
     "@dnd-kit/modifiers": "^9.0.0",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
-    "bcryptjs": "^3.0.2",
+    "bcryptjs": "^3.0.3",
+    "cookie": "^1.0.2",
     "framer-motion": "^12.23.24",
+    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.542.0",
     "mongodb": "^6.20.0",
     "next": "15.5.2",
@@ -200,6 +218,9 @@ docker-compose.yml with a Mongo service and the app (node). For production prefe
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cookie": "^0.6.0",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
