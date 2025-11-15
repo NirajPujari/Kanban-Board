@@ -122,7 +122,7 @@ function Dashboard({ id }: DashboardProps) {
           },
           body: JSON.stringify(newData),
         });
-        newData._id = data.taskId || Date.now().toString();
+        newData._id = data.insertedId
         toast.success("Task created");
       } catch (err) {
         const error = err as Error;

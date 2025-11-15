@@ -321,7 +321,7 @@ export default function AdminDashboard() {
           },
           body: JSON.stringify(newData),
         });
-        newData._id = data.taskId || Date.now().toString();
+        newData._id = data.insertedId
       } catch (err) {
         console.error("Create error:", err);
         toast.error((err as Error).message || "Failed to create task");
