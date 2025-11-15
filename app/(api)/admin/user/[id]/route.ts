@@ -1,7 +1,7 @@
 import { getDb } from "@db";
 import { ObjectId } from "mongodb";
-import bcrypt from "bcryptjs";
 import { User } from "@types";
+import { hashPassword } from "@/app/utils/auth";
 
 export async function PUT(req: Request) {
   const url = new URL(req.url);
@@ -17,7 +17,7 @@ export async function PUT(req: Request) {
 
   // Hash only if password is sent
   if (body.password) {
-    updateFields.password = await bcrypt.hash(body.password, 10);
+    updateFields.password = await hashPassword(body.password);
   }
 
   const result = await db

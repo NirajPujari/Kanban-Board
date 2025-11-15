@@ -1,5 +1,5 @@
+import { hashPassword } from "@/app/utils/auth";
 import { getDb } from "@db";
-import bcrypt from "bcryptjs";
 
 export async function GET() {
   const db = await getDb();
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
   const db = await getDb();
 
   // Hash password before storing
-  const hashedPassword = await bcrypt.hash(body.password, 10);
+  const hashedPassword = await hashPassword(body.password);
 
   const newUser = {
     name: body.name.trim(),

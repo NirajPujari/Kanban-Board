@@ -54,7 +54,7 @@ export default function Authication() {
     }
 
     try {
-      const data = await apiFetchJson("/user/login", {
+      const data = await apiFetchJson("/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -108,7 +108,7 @@ export default function Authication() {
     }
 
     try {
-      await apiFetchJson("/user/signup", {
+      await apiFetchJson("/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
