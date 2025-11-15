@@ -14,11 +14,17 @@ export function findCardInBoard(
 
 export async function apiFetchJson(
   input: RequestInfo,
-  init?: RequestInit,
+  init: RequestInit = {},
   signal?: AbortSignal
 ) {
-  const response = await fetch(input, { ...init, signal });
+  const response = await fetch(input, {
+    ...init,
+    signal
+  });
+
   const json = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(json.error || response.statusText || "API error");
+  if (!response.ok) {
+    throw new Error(json.error || response.statusText || "API error");
+  }
   return json;
 }
